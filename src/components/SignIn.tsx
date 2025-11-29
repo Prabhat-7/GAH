@@ -1,5 +1,5 @@
 "use client";
-import { login } from "@/lib/actions/auth";
+import { login, loginWithCredentials } from "@/lib/actions/auth";
 
 import {
   Card,
@@ -12,8 +12,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
+  const router = useRouter();
+
+  const [error, setError] = useState("");
+  const CredentialsLogin = async (formData: FormData) => {
+    try {
+      const response = await loginWithCredentials(formData);
+      router.push("/dashboard");
+      if (response.error) {
+        setError(response.error.message);
+      }
+    } catch (error) {
+      setError("Check your credentials");
+    }
+  };
+
   return (
     <div className="space-y-6 gap-3  flex flex-col justify-center items-center">
       <Card className="border shadow-lg w-[35%] ">
@@ -25,7 +42,11 @@ export default function SignIn() {
         </CardHeader>
 
         <CardContent>
-          <form className="space-y-6">
+          {error && <p className="text-red-500">{error}</p>}
+          <form
+            action={(formData: FormData) => CredentialsLogin(formData)}
+            className="space-y-6"
+          >
             {/* Email Input */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
@@ -33,6 +54,7 @@ export default function SignIn() {
               </Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="name@example.com"
                 className="h-10"
@@ -54,6 +76,7 @@ export default function SignIn() {
               </div>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="••••••••"
                 className="h-10"
@@ -72,7 +95,7 @@ export default function SignIn() {
             </div>
 
             {/* Sign In Button */}
-            <Button className="w-full h-10 text-base font-medium">
+            <Button type="submit" className="w-full h-10 text-base font-medium">
               Sign in
             </Button>
           </form>

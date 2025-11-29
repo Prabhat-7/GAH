@@ -19,7 +19,7 @@ export default function UserButton({ user }: { user: any }) {
       <DialogTrigger asChild>
         <button>
           <Avatar>
-            <AvatarImage src={user.image} />
+            <AvatarImage src={user.image || "/dummy_user.jpg"} />
           </Avatar>
         </button>
       </DialogTrigger>
@@ -27,7 +27,7 @@ export default function UserButton({ user }: { user: any }) {
         <DialogHeader className="flex flex-col justify-center items-center">
           <DialogTitle>
             <Image
-              src={user.image}
+              src={user.image || "/dummy_user.jpg"}
               alt={user.name}
               width={100}
               height={100}
