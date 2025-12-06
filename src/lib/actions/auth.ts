@@ -1,9 +1,9 @@
 "use server";
-
+import "server-only";
 import { signIn, signOut } from "../auth";
 
 export async function login() {
-  await signIn("google", { redirectTo: "/dashboard" });
+  await signIn("google", { redirectTo: "/shop" });
 }
 export async function logout() {
   await signOut({ redirectTo: "/signIn" });

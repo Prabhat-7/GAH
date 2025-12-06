@@ -5,6 +5,7 @@ import prisma from "./db";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getUser } from "./actions/getUser";
 import db from "./db";
+import bcrpyt from "bcrypt";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -45,8 +46,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         const user = await getUser(credentials?.email as string);
+        const isValidPassword = await bcrpyt.compare(
+          credentials?.password as string,
+          user?.password as string
+        );
+
         if (user) {
-          if (user.password == credentials?.password) {
+          if (isValidPassword) {
             return user;
           } else throw new Error("Invalid password");
         } else {

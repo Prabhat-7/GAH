@@ -1,14 +1,10 @@
-import SignIn from "@/components/signIn";
+import SignUp from "@/components/signup";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-export default async function SignInPage() {
+export default async function SignUpPage() {
   const session = await auth();
   const user = session?.user;
   if (user) redirect("/shop");
-  return (
-    <div>
-      <SignIn />
-    </div>
-  );
+  return <SignUp />;
 }

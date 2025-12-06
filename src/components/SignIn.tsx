@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignIn() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function SignIn() {
   const CredentialsLogin = async (formData: FormData) => {
     try {
       const response = await loginWithCredentials(formData);
-      router.push("/dashboard");
+      router.push("/shop");
       if (response.error) {
         setError(response.error.message);
       }
@@ -32,8 +33,8 @@ export default function SignIn() {
   };
 
   return (
-    <div className="space-y-6 gap-3  flex flex-col justify-center items-center">
-      <Card className="border shadow-lg w-[35%] ">
+    <div className="space-y-6 gap-3  flex flex-col justify-center items-center pt-6">
+      <Card className="border shadow-lg w-[35%] p-6 mt-4 ">
         <CardHeader className="space-y-2">
           <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
           <CardDescription className="text-center">
@@ -136,9 +137,12 @@ export default function SignIn() {
       {/* Sign Up Link */}
       <p className="text-center text-sm text-muted-foreground">
         Don't have an account?{" "}
-        <a href="#" className="text-primary hover:underline font-medium">
+        <Link
+          href="/signUp"
+          className="text-primary hover:underline font-medium"
+        >
           Sign up
-        </a>
+        </Link>
       </p>
     </div>
   );

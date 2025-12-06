@@ -19,7 +19,12 @@ export default function UserButton({ user }: { user: any }) {
       <DialogTrigger asChild>
         <button>
           <Avatar>
-            <AvatarImage src={user.image || "/dummy_user.jpg"} />
+            <Image
+              src={user.image || "/dummy_user.jpg"}
+              alt={"Avatar"}
+              width={40}
+              height={40}
+            />
           </Avatar>
         </button>
       </DialogTrigger>
@@ -28,7 +33,7 @@ export default function UserButton({ user }: { user: any }) {
           <DialogTitle>
             <Image
               src={user.image || "/dummy_user.jpg"}
-              alt={user.name}
+              alt={"Avatar"}
               width={100}
               height={100}
               className="rounded-full"

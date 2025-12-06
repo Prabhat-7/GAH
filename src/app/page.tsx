@@ -1,13 +1,15 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import Featured from "@/components/featured";
+import Header from "@/components/header";
+import Landing from "@/components/landing";
+import { Footer } from "react-day-picker";
 
 export default function Home() {
   return (
-    <div className="flex flex-row justify-end h-screen p-6">
-      <h1></h1>
-      <Button>
-        <Link href="/signIn">Sign In</Link>
-      </Button>
+    <div>
+      <Header />
+      <Landing />
+      <Featured />
+      <Footer />
     </div>
   );
 }
