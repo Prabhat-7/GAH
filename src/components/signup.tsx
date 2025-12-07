@@ -26,7 +26,7 @@ export default function SignUp() {
       redirect("/signIn");
     }
 
-    redirect("/checkOtp");
+    redirect("/verifyOTP");
   };
   return (
     <div className="flex items-center justify-center p-3 mt-6 ">

@@ -13,7 +13,7 @@ export async function GenerateJWT(email: string) {
     id: user?.id,
   };
   const options = {
-    expiresIn: 5 * 60,
-  };
-  return jwt.sign(payload, JWT_SECRET, options as jwt.SignOptions);
+    expiresIn: 30 * 60, // expires in 30 minutes
+  } as jwt.SignOptions;
+  return jwt.sign(payload, JWT_SECRET, options);
 }

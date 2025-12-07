@@ -7,6 +7,9 @@ import {
 } from "@/components/ui/input-otp";
 import { CompareOTP } from "@/lib/actions/compareOtp";
 import { CreateUserViaTemp } from "@/lib/actions/createUserViaTemp";
+import { GetExpiryDate } from "@/lib/actions/getExpiryDate";
+import { HandleResend } from "@/lib/actions/handleResend";
+import { time } from "console";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -15,10 +18,16 @@ export default function CheckOtp() {
   const [otpResponse, setOtpResponse] = useState<
     "userNotFound" | "invalid" | "valid" | "expired" | ""
   >("");
+  const [expiry, setExpiry] = useState<Date | undefined>();
   const [timeLeft, setTimeLeft] = useState(300);
   const [isExpired, setIsExpired] = useState(false);
+
   const [canResend, setCanResend] = useState(false);
 
+  async function fetchExpiryDate() {
+    const response = await GetExpiryDate();
+    setExpiry(response);
+  }
   const handleClick = async () => {
     const response = await CompareOTP(otp);
     console.log(response);
@@ -29,8 +38,16 @@ export default function CheckOtp() {
     setOtpResponse(response);
     setOtp("");
   };
+  const handleResend = async () => {
+    HandleResend();
+    fetchExpiryDate();
+    setOtpResponse("");
+    setCanResend(false);
+    setIsExpired(false);
+  };
 
   useEffect(() => {
+    if (timeLeft <= 270) setCanResend(true);
     if (timeLeft <= 0) {
       setIsExpired(true);
       return;
@@ -44,12 +61,12 @@ export default function CheckOtp() {
   }, [timeLeft]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCanResend(true);
-    }, 30000);
-    return () => clearTimeout(timer);
+    fetchExpiryDate();
   }, []);
 
+  useEffect(() => {
+    setTimeLeft(Math.floor((Number(expiry) - Date.now()) / 1000));
+  }, [expiry]);
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -66,16 +83,25 @@ export default function CheckOtp() {
           <p className="text-muted-foreground/70">
             Enter the 6-digit code sent to your email
           </p>
-          {otpResponse == "invalid" && (
+
+          {(otpResponse == "expired" || otpResponse == "userNotFound") && (
             <p className=" text-red-500 pt-3">
-              OTP is incorrect. Please try again OR Resend new OTP
+              Some error has occured. Try Signing Up again .
             </p>
           )}
-          {otpResponse == "expired" && (
-            <p className="text-red-500 pt-3">
-              Your OTP has expired . Please request new one.
-            </p>
-          )}
+          {!(otpResponse == "expired" || otpResponse == "userNotFound") &&
+            !isExpired &&
+            otpResponse == "invalid" && (
+              <p className=" text-red-500 pt-3">
+                OTP is incorrect. Please try again OR Resend new OTP
+              </p>
+            )}
+          {!(otpResponse == "expired" || otpResponse == "userNotFound") &&
+            isExpired && (
+              <p className="text-red-500 pt-3">
+                Your OTP has expired . Please request new one.
+              </p>
+            )}
         </div>
         <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
           <InputOTPGroup>
@@ -116,32 +142,41 @@ export default function CheckOtp() {
           </InputOTPGroup>
         </InputOTP>
         {/* Timer and Status */}
-        <div className="flex items-center justify-between w-full">
-          <div
-            className={`flex items-center gap-2 ${
-              isExpired ? "text-destructive" : "text-muted-foreground"
-            }`}
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00-.293.707l-1.414 1.414a1 1 0 001.414 1.414L9 9.414V6z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {isExpired ? (
-              <div className="font-semibold">Code expired</div>
-            ) : (
-              <div className="flex items-center justify-center gap-1">
-                Code expires in
-                <div className="font-semibold">{formatTime(timeLeft)}</div>
-              </div>
-            )}
-          </div>
+        <div
+          className={`flex items-center  w-full ${
+            expiry ? "justify-between" : "justify-end"
+          }`}
+        >
+          {expiry && (
+            <div
+              className={`flex items-center gap-2 ${
+                isExpired || otpResponse == "expired"
+                  ? "text-destructive"
+                  : "text-muted-foreground"
+              }`}
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00-.293.707l-1.414 1.414a1 1 0 001.414 1.414L9 9.414V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {isExpired ? (
+                <div className="font-semibold">Code expired</div>
+              ) : (
+                <div className="flex items-center justify-center gap-1">
+                  Code expires in
+                  <div className="font-semibold">{formatTime(timeLeft)}</div>
+                </div>
+              )}
+            </div>
+          )}
           <button
             className={`text-primary hover:underline font-medium ${
               canResend ? " cursor-pointer" : " cursor-not-allowed"
             }`}
+            onClick={handleResend}
             disabled={!canResend}
           >
             Resend Code

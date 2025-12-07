@@ -28,7 +28,8 @@ export async function CreatePendingUser(formData: FormData) {
         email,
         password: hashedPassword,
         otp,
-        expiresAt: new Date(Date.now() + 5 * 60 * 1000), //expires after 5 minutes
+        otp_expiry: new Date(Date.now() + 5 * 60 * 1000),
+        expires_at: new Date(Date.now() + 30 * 60 * 1000), //expires after 30 minutes
       },
     });
     await SendOtp(pendingUser.email, verificationCode);
