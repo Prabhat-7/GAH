@@ -76,7 +76,7 @@ model Category {
 
 model ProductType {
   id         String     @id @default(cuid())
-  name       String
+  name       String     @unique
   categories Category[]
 }
 

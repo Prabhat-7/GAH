@@ -12,10 +12,9 @@ import type { User } from "next-auth";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Role } from "@/lib/auth";
 import { logout } from "@/actions/auth";
 
-export default function UserButton({ user }: { user: User & { role: Role } }) {
+export default function UserButton({ user }: { user: User }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 

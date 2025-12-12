@@ -32,6 +32,7 @@ import {
 } from "../ui/select";
 import createUser from "@/actions/createUser";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -41,7 +42,6 @@ const formSchema = z.object({
 });
 
 export default function AddUser() {
-  const [response, setResponse] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,8 +53,20 @@ export default function AddUser() {
   });
 
   const addUser = async (values: z.infer<typeof formSchema>) => {
-    const response = (await createUser(values)) as string;
-    setResponse(response);
+    const res = (await createUser(values)) as boolean;
+    res
+      ? toast.success("User created Successfully.", {
+          style: {
+            color: "green",
+            fontSize: "16px",
+          },
+        })
+      : toast.warning("User already exists", {
+          style: {
+            color: "#ff3333",
+            fontSize: "17px",
+          },
+        });
     form.reset();
   };
 
@@ -66,9 +78,8 @@ export default function AddUser() {
           You can add an user by providing the following credentials
         </SheetDescription>
       </SheetHeader>
-      {response && <p className="text-destructive">{response}</p>}
       <Form {...form}>
-        <form className=" space-y-8" onSubmit={form.handleSubmit(addUser)}>
+        <form className="space-y-8" onSubmit={form.handleSubmit(addUser)}>
           <FormField
             name="name"
             render={({ field }) => (

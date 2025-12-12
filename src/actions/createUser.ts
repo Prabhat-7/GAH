@@ -21,8 +21,8 @@ export default async function createUser(userData: UserData) {
         role: userData.role,
       },
     });
-    console.log(user);
+    return true;
   } catch (err) {
-    return "user already exists";
+    return false;
   }
 }

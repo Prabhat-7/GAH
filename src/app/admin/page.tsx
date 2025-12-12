@@ -1,8 +1,11 @@
 import ImageUploader from "@/components/admin/ImageUploader";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-import React from "react";
-
-export default function Admin() {
+export default async function Admin() {
+  const session = await auth();
+  if (!session) redirect("/signIn");
+  if (!(session.user.role == "admin")) redirect("/signIn");
   return (
     <div>
       <ImageUploader />

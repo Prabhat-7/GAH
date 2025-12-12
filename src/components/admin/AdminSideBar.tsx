@@ -26,6 +26,7 @@ import UserPanel from "../UserPanel";
 import { Sheet, SheetTrigger } from "../ui/sheet";
 import AddUser from "./AddUser";
 import AddProduct from "./AddProduct";
+import AddProductType from "./AddProductType";
 
 const applicationMenu = [
   {
@@ -59,12 +60,17 @@ const productMenu = [
   {
     title: "Add Product",
     icon: Plus,
-    url: "/admin/addProduct",
+    url: "#",
   },
   {
     title: "Add Category",
     icon: Plus,
-    url: "/admin/addCategory",
+    url: "#",
+  },
+  {
+    title: "Add Product Type",
+    icon: Plus,
+    url: "#",
   },
 ];
 const userMenu = [
@@ -76,7 +82,7 @@ const userMenu = [
   {
     title: "Add user",
     icon: Plus,
-    url: "/admin/addUser",
+    url: "#",
   },
 ];
 
@@ -122,13 +128,45 @@ export default function AdminSidebar() {
                   <Sheet>
                     <SheetTrigger asChild>
                       <SidebarMenuButton asChild>
-                        <Link href={"#"}>
+                        <Link href={productMenu[1].url}>
                           {React.createElement(productMenu[1].icon)}
-                          Add Product
+                          {productMenu[1].title}
                         </Link>
                       </SidebarMenuButton>
                     </SheetTrigger>
                     <AddProduct />
+                  </Sheet>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              {/* Add Category */}
+              <SidebarMenuItem key={productMenu[2].title}>
+                <SidebarMenuButton asChild>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <SidebarMenuButton asChild>
+                        <Link href={productMenu[2].url}>
+                          {React.createElement(productMenu[2].icon)}
+                          {productMenu[2].title}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SheetTrigger>
+                    <AddProductType />
+                  </Sheet>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              {/* Add Product Type */}
+              <SidebarMenuItem key={productMenu[3].title}>
+                <SidebarMenuButton asChild>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <SidebarMenuButton asChild>
+                        <Link href={productMenu[3].url}>
+                          {React.createElement(productMenu[3].icon)}
+                          {productMenu[3].title}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SheetTrigger>
+                    <AddProductType />
                   </Sheet>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -153,9 +191,9 @@ export default function AdminSidebar() {
                   <Sheet>
                     <SheetTrigger asChild>
                       <SidebarMenuButton asChild>
-                        <Link href={"#"}>
+                        <Link href={userMenu[1].url}>
                           {React.createElement(userMenu[1].icon)}
-                          Add User
+                          {userMenu[1].title}
                         </Link>
                       </SidebarMenuButton>
                     </SheetTrigger>

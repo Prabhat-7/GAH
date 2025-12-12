@@ -28,24 +28,40 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import findAllCategories from "@/actions/findAllCategories";
+import createProductType from "@/actions/createProductType";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  name: z.string(),
-  category: z.string(),
-  imageUrl: z.string(),
+  name: z.string().min(3),
 });
 
-export default function AddProduct() {
-  const [categories, setCategories] = useState<{ name: string; id: string }[]>(
-    []
-  );
+export default function AddProductType() {
+  const [response, setResponse] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
     },
   });
-  const addProductType = async () => {};
+  const addProductType = async (formData: z.infer<typeof formSchema>) => {
+    const res = await createProductType(formData);
+    if (res) {
+      toast.success("Product Type added Successfully", {
+        style: {
+          color: "green",
+          fontSize: "16px",
+        },
+      });
+    } else {
+      toast.warning("Product Type already Exists", {
+        style: {
+          color: "#ff3333",
+          fontSize: "17px",
+        },
+      });
+    }
+    form.reset();
+  };
 
   return (
     <SheetContent className=" px-5">
@@ -65,7 +81,7 @@ export default function AddProduct() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Product Type</FormLabel>
                 <FormControl>
                   <Input placeholder="Bags" {...field} />
                 </FormControl>

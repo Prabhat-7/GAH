@@ -8,7 +8,7 @@ export default async function UserPanel() {
 
   return (
     <div className=" flex items-center justify-start gap-3">
-      <UserButton user={user as User} />
+      {user && <UserButton user={user as User} />}
       <p className="font-bold text-muted-foreground">{user?.name}</p>
     </div>
   );
