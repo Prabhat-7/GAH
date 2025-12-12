@@ -1,5 +1,4 @@
 "use client";
-import { login, loginWithCredentials } from "@/lib/actions/auth";
 
 import {
   Card,
@@ -15,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { login, loginWithCredentials } from "@/actions/auth";
 
 export default function SignIn() {
   const router = useRouter();

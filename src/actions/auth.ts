@@ -1,6 +1,6 @@
 "use server";
+import { signIn, signOut } from "@/lib/auth";
 import "server-only";
-import { signIn, signOut } from "../auth";
 
 export async function login() {
   await signIn("google", { redirectTo: "/shop" });

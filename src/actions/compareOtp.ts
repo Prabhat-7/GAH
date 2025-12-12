@@ -2,10 +2,10 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
-import db from "../db";
 import { CreateUserViaTemp } from "./createUserViaTemp";
 import { DeletePendingUser } from "./deletePendingUser";
 import { DeleteJWT } from "./deleteJWT";
+import db from "@/lib/db";
 
 export async function CompareOTP(otp: string) {
   const cookieStore = await cookies();

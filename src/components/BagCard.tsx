@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import type { Bag } from "./featured";
+import type { Bag } from "./Featured";
 import { Heart, Star, StarIcon } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";

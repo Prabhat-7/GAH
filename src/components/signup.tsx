@@ -4,12 +4,20 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 import { redirect } from "next/navigation";
-import { CreatePendingUser } from "@/lib/actions/createPendingUser";
+
 import { useState } from "react";
+import { CreatePendingUser } from "@/actions/createPendingUser";
 
 export default function SignUp() {
   const [pendingUserId, setPendingUserId] = useState("");
   const signUp = async (formData: FormData) => {
+    const email = (formData.get("email") as string).trim();
+    const name = (formData.get("name") as string).trim();
+    const password = (formData.get("password") as string).trim();
+    if (!email || !name || !password) {
+      alert("Fill all the credentials");
+      return;
+    }
     try {
       const response = await CreatePendingUser(formData);
       if (response == "userExists") {

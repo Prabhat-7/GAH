@@ -1,15 +1,14 @@
 "use client";
+import { CompareOTP } from "@/actions/compareOtp";
+import { GetExpiryDate } from "@/actions/getExpiryDate";
+import { HandleResend } from "@/actions/handleResend";
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { CompareOTP } from "@/lib/actions/compareOtp";
-import { CreateUserViaTemp } from "@/lib/actions/createUserViaTemp";
-import { GetExpiryDate } from "@/lib/actions/getExpiryDate";
-import { HandleResend } from "@/lib/actions/handleResend";
-import { time } from "console";
+
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 

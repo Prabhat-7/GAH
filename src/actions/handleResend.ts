@@ -2,9 +2,9 @@
 import "server-only";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import db from "../db";
 import bcrypt from "bcrypt";
 import { SendOtp } from "./sendOtp";
+import db from "@/lib/db";
 
 export async function HandleResend() {
   const cookieStore = await cookies();

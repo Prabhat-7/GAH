@@ -1,4 +1,4 @@
-import BagCard from "./bag_card";
+import BagCard from "./BagCard";
 import { Button } from "./ui/button";
 import Link from "next/link";
 

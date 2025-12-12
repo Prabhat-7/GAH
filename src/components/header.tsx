@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
-import Logo from "./logo";
-import NavBar from "./navbar";
-import UserButton from "./userbutton";
+import Logo from "./Logo";
+import NavBar from "./Navbar";
+import UserButton from "./UserButton";
 
 export default async function Header() {
   const session = await auth();
@@ -11,7 +11,7 @@ export default async function Header() {
       <Logo />
       <NavBar />
       {user && (
-        <div className="flex absolute top-4 right-4 border-2 rounded-full p-0 border-primary">
+        <div className="flex absolute top-4 right-4 ">
           <UserButton user={user} />
         </div>
       )}

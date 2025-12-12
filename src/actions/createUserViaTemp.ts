@@ -1,7 +1,7 @@
 "use server";
 import "server-only";
-import db from "../db";
 import { Whisper } from "next/font/google";
+import db from "@/lib/db";
 
 export async function CreateUserViaTemp(id: string) {
   try {

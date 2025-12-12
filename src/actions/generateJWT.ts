@@ -1,7 +1,7 @@
 "use server";
 import "server-only";
 import jwt from "jsonwebtoken";
-import db from "../db";
+import db from "@/lib/db";
 
 export async function GenerateJWT(email: string) {
   const JWT_SECRET = process.env.JWT_SECRET as string;

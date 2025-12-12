@@ -1,6 +1,6 @@
-import Featured from "@/components/featured";
-import Header from "@/components/header";
-import Landing from "@/components/landing";
+import Featured from "@/components/Featured";
+import Header from "@/components/Header";
+import Landing from "@/components/Landing";
 import { Footer } from "react-day-picker";
 
 export default function Home() {
