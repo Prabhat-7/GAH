@@ -27,6 +27,7 @@ import { Sheet, SheetTrigger } from "../ui/sheet";
 import AddUser from "./AddUser";
 import AddProduct from "./AddProduct";
 import AddProductType from "./AddProductType";
+import AddCategory from "./AddCategory";
 
 const applicationMenu = [
   {
@@ -150,7 +151,7 @@ export default function AdminSidebar() {
                         </Link>
                       </SidebarMenuButton>
                     </SheetTrigger>
-                    <AddProductType />
+                    <AddCategory />
                   </Sheet>
                 </SidebarMenuButton>
               </SidebarMenuItem>
