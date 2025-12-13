@@ -28,35 +28,31 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import findAllCategories from "@/actions/findAllCategories";
+import { useQuery } from "@tanstack/react-query";
+import fetchCategories from "@/actions/findAllCategories";
 
 const formSchema = z.object({
   name: z.string(),
+  price: z.float32(),
   category: z.string(),
   imageUrl: z.string(),
 });
 
 export default function AddProduct() {
-  const [categories, setCategories] = useState<{ name: string; id: string }[]>(
-    []
-  );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      price: 0,
       category: "",
       imageUrl: "",
     },
   });
-  const addProduct = async () => {};
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const AllCategories = await findAllCategories();
-      if (!AllCategories) return;
-      setCategories(AllCategories);
-    };
-    fetchCategories();
-  }, []);
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
 
   return (
     <SheetContent className=" px-5">
@@ -68,14 +64,14 @@ export default function AddProduct() {
       </SheetHeader>
 
       <Form {...form}>
-        <form className=" space-y-8" onSubmit={form.handleSubmit(addProduct)}>
+        <form className=" space-y-8" onSubmit={form.handleSubmit()}>
           <FormField
             name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="David" {...field} />
+                  <Input placeholder="Classic Satchel" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is the public display name of the product
@@ -101,20 +97,7 @@ export default function AddProduct() {
             )}
           />
           <FormField
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="password" {...field} />
-                </FormControl>
-                <FormDescription>This is your password</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="role"
+            name="category"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>

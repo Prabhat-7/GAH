@@ -30,38 +30,43 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import createProductType from "@/actions/createProductType";
 import { toast } from "sonner";
 import fetchProductTypes from "@/actions/fetchProductTypes";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import createCategory from "@/actions/createCategory";
 
 const formSchema = z.object({
   name: z.string().min(3),
+  type: z.string().nonempty(),
 });
 
 export default function AddCategory() {
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      type: "",
     },
   });
-  const addCategory = async (formData: z.infer<typeof formSchema>) => {
-    const res = await createProductType(formData);
-    if (res) {
-      toast.success("Product Type added Successfully", {
-        style: {
-          color: "green",
-          fontSize: "16px",
-        },
-      });
-    } else {
-      toast.warning("Product Type already Exists", {
-        style: {
-          color: "#ff3333",
-          fontSize: "17px",
-        },
-      });
-    }
-    form.reset();
-  };
+  const addCategory = useMutation({
+    mutationFn: createCategory,
+    onSuccess: (res) => {
+      if (res) {
+        toast.success("Category added Successfully", {
+          style: { color: "green", fontSize: "16px" },
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: ["categories"],
+        });
+      } else {
+        toast.warning("Category already Exists", {
+          style: { color: "#ff3333", fontSize: "17px" },
+        });
+      }
+
+      form.reset();
+    },
+  });
 
   const { data: productTypes, status } = useQuery({
     queryKey: ["product-types"],
@@ -78,7 +83,10 @@ export default function AddCategory() {
       </SheetHeader>
 
       <Form {...form}>
-        <form className=" space-y-8" onSubmit={form.handleSubmit(addCategory)}>
+        <form
+          className="space-y-8"
+          onSubmit={form.handleSubmit((data) => addCategory.mutate(data))}
+        >
           <FormField
             name="name"
             render={({ field }) => (
@@ -95,12 +103,12 @@ export default function AddCategory() {
             )}
           />
           <FormField
-            name="role"
+            name="type"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Product Type</FormLabel>
                 <FormControl>
-                  <Select>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="type" />
                     </SelectTrigger>

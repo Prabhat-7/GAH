@@ -2,7 +2,7 @@
 import db from "@/lib/db";
 import "server-only";
 
-export default async function findAllCategories() {
+export default async function fetchCategories() {
   const categories = await db.category.findMany();
   return categories;
 }
